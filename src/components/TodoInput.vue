@@ -53,6 +53,7 @@ input:focus {
   height: 50px;
   line-height: 50px;
   border-radius: 5px;
+  margin:10px;
 }
 .inputBox input {
   border-style: none;

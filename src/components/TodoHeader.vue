@@ -1,7 +1,9 @@
 <template>
-  <header>
-    <h1>TODO it!</h1>
-  </header>
+<v-container>
+  <v-row justify="center">  
+    <h1>TODO it!</h1>  
+  </v-row>
+</v-container>
 </template>
 
 <script>

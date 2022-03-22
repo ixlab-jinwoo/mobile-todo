@@ -1,4 +1,4 @@
-# todo-app
+# todo-mobile
 
 ## Project setup
 ```
