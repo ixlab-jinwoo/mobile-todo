@@ -13,7 +13,9 @@
       </div>
 
       <v-spacer></v-spacer>
-
+      <v-btn v-if="!name" outlined @click="addUser"> Signup </v-btn>
+      <v-spacer></v-spacer>
+      <v-btn outlined @click="login"> Login </v-btn>
       <v-btn text>
         <span>More</span>
         <v-icon>mdi-menu</v-icon>
@@ -21,12 +23,32 @@
     </v-app-bar>
 
     <v-main>
-      <TodoHeader />
-      <TodoInput v-on:addTodo="addTodo"></TodoInput>
-      <TodoList
-        v-bind:propsdata="todoItems"
-        @removeTodo="removeTodo"
-      ></TodoList>
+      <v-form
+        ><v-container
+          ><v-row>
+            <v-col cols="6" sm="3">
+              <v-text-field v-model="email" label="email"></v-text-field>
+            </v-col>
+            <v-col cols="6" sm="3">
+              <v-text-field
+                v-model="password"
+                :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                :type="show1 ? 'text' : 'password'"
+                label="Password"
+                hint="At least 6 characters"
+                counter
+                @click:append="show1 = !show1"
+              ></v-text-field>
+            </v-col> </v-row></v-container
+      ></v-form>
+      <template v-if="name">
+        <TodoHeader :msg="name" />
+        <TodoInput v-on:addTodo="addTodo"></TodoInput>
+        <TodoList
+          v-bind:propsdata="todoItems"
+          @removeTodo="removeTodo"
+        ></TodoList>
+      </template>
     </v-main>
     <v-footer color="primary">
       <TodoFooter v-on:removeAll="clearAll" />
@@ -39,6 +61,12 @@ import TodoFooter from "./components/TodoFooter.vue";
 import TodoHeader from "./components/TodoHeader.vue";
 import TodoList from "./components/TodoList.vue";
 import TodoInput from "./components/TodoInput.vue";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+} from "firebase/auth";
 
 export default {
   name: "App",
@@ -53,6 +81,11 @@ export default {
   data() {
     return {
       todoItems: [],
+      name: "",
+      auth: getAuth(),
+      show1: false,
+      password: "",
+      email: "",
     };
   },
   methods: {
@@ -68,6 +101,34 @@ export default {
       localStorage.removeItem(todoItem);
       this.todoItems.splice(index, 1);
     },
+    addUser() {
+      createUserWithEmailAndPassword(this.auth, this.email, this.password)
+        .then((userCredential) => {
+          // Signed in
+          var user = userCredential.user;
+          console.log(user);
+          // ...
+        })
+        .catch((error) => {
+          console.log(error);
+          // var errorCode = error.code;
+          // var errorMessage = error.message;
+          // ..
+        });
+    },
+    login() {
+      signInWithEmailAndPassword(this.auth, this.email, this.password)
+        .then((userCredential) => {
+          // Signed in
+          console.log(userCredential.user);
+          this.name = userCredential.user.email;
+
+          // ...
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
   created() {
     if (localStorage.length > 0) {
@@ -75,6 +136,17 @@ export default {
         this.todoItems.push(localStorage.key(i));
       }
     }
+    onAuthStateChanged(this.auth, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/firebase.User
+        this.name = user.email;
+        // ...
+      } else {
+        // User is signed out
+        // ...
+      }
+    });
   },
 };
 </script>

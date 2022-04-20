@@ -1,13 +1,14 @@
 <template>
 <v-container>
   <v-row justify="center">  
-    <h1>TODO it!</h1>  
+    <h1> {{ msg }} TODO it!</h1>   
   </v-row>
 </v-container>
 </template>
 
 <script>
 export default {
+  props:['msg']
 }
 </script>
 
