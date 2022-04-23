@@ -3,6 +3,7 @@ import App from './App.vue'
 import './registerServiceWorker'
 import vuetify from './plugins/vuetify'
 import router from './route/index.js'
+import { store } from './store/store.js'
 
 Vue.config.productionTip = false
 
@@ -27,5 +28,6 @@ initializeApp(firebaseConfig);
 new Vue({  
   vuetify,
   router,
+  store,
   render: h => h(App)
 }).$mount('#app')

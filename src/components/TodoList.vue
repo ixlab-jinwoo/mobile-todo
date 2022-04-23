@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <transition-group class="pl-0" name="list" tag="ul">
-      <v-card class="mb-2 " v-for="(todoItem, index) in propsdata" :key="todoItem">
+      <v-card class="mb-2 " v-for="(todoItem, index) in todos" :key="todoItem">
         <v-card-actions>
           <v-list-item>
             <v-list-item-avatar>
@@ -12,7 +12,7 @@
               <v-list-item-title v-text="todoItem"></v-list-item-title>
             </v-list-item-content>
 
-            <v-list-item-action @click="removeTodo(todoItem, index)">
+            <v-list-item-action @click="removeTodo({todoItem, index})">
               <v-btn icon>
                 <v-icon>mdi-close</v-icon>
               </v-btn>
@@ -25,13 +25,25 @@
 </template>
 
 <script>
-export default {
-  props: ["propsdata"],
+import { mapGetters, mapMutations } from 'vuex';
+export default {  
   methods: {
-    removeTodo(todoItem, index) {
-      this.$emit("removeTodo", todoItem, index);
-    },
-  },
+    ...mapMutations([
+      'removeTodo'
+    ]),
+    // removeTodo(todoItem, index) {
+    //   // this.$emit("removeTodo", todoItem, index);
+      
+    // },
+   },
+  computed:{
+    ...mapGetters({
+      'todos':'getTodos'
+    })
+    // todos(){      
+    //    return this.$store.getters.getTodos;
+    // } 
+  }
 };
 </script>
 

@@ -21,14 +21,11 @@
 
     <v-main>
       <TodoHeader :msg="name" />
-      <TodoInput v-on:addTodo="addTodo"></TodoInput>
-      <TodoList
-        v-bind:propsdata="todoItems"
-        @removeTodo="removeTodo"
-      ></TodoList>
+      <TodoInput></TodoInput>
+      <TodoList></TodoList>
     </v-main>
     <v-footer color="primary">
-      <TodoFooter v-on:removeAll="clearAll" />
+      <TodoFooter />
     </v-footer>
   </v-app>
 </template>
@@ -51,30 +48,18 @@ export default {
   },
 
   data() {
-    return {
-      todoItems: [],
+    return {      
       name: "",
       auth: getAuth()      
     };
   },
-  methods: {
-    clearAll() {
-      localStorage.clear();
-      this.todoItems = [];
-    },
-    addTodo(todoItem) {
-      localStorage.setItem(todoItem, todoItem);
-      this.todoItems.push(todoItem);
-    },
-    removeTodo(todoItem, index) {
-      localStorage.removeItem(todoItem);
-      this.todoItems.splice(index, 1);
-    },
+  methods: {    
   },
   created() {
     if (localStorage.length > 0) {
       for (var i = 0; i < localStorage.length; i++) {
-        this.todoItems.push(localStorage.key(i));
+        // this.todoItems.push(localStorage.key(i));
+        this.$store.commit('addTodo',localStorage.key(i));
       }
     }
     onAuthStateChanged(this.auth, (user) => {
