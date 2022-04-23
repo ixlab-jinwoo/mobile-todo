@@ -1,65 +1,36 @@
 <template>
-  <v-app>
-    <v-app-bar app color="primary" dark>
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-      <v-btn text>
-        <span>More</span>
-        <v-icon>mdi-menu</v-icon>
-      </v-btn>
-    </v-app-bar>
-
-    <v-main>
-      <TodoHeader :msg="name" />
-      <TodoInput></TodoInput>
-      <TodoList></TodoList>
-    </v-main>
-    <v-footer color="primary">
-      <TodoFooter />
-    </v-footer>
-  </v-app>
+  <v-container>
+    <TodoHeader :msg="name" />
+    <TodoInput></TodoInput>
+    <TodoList></TodoList>
+  </v-container>
 </template>
 
 <script>
-import TodoFooter from "./TodoFooter.vue";
 import TodoHeader from "./TodoHeader.vue";
 import TodoList from "./TodoList.vue";
 import TodoInput from "./TodoInput.vue";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
-export default {
-  name: "App",
-
+export default {  
   components: {
-    TodoList,
-    TodoFooter,
+    TodoList,    
     TodoHeader,
     TodoInput,
   },
 
   data() {
-    return {      
+    return {
       name: "",
-      auth: getAuth()      
+      auth: getAuth(),
     };
   },
-  methods: {    
-  },
+  methods: {},
   created() {
     if (localStorage.length > 0) {
       for (var i = 0; i < localStorage.length; i++) {
         // this.todoItems.push(localStorage.key(i));
-        this.$store.commit('addTodo',localStorage.key(i));
+        this.$store.commit("addTodo", localStorage.key(i));
       }
     }
     onAuthStateChanged(this.auth, (user) => {
@@ -69,7 +40,7 @@ export default {
         this.name = user.email;
         // ...
       } else {
-        this.$router.replace({path:"/"});
+        this.$router.replace({ path: "/" });
         // ...
       }
     });
